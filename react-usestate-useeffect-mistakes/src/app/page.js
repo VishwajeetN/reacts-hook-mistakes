@@ -378,6 +378,7 @@ export default function CounterExample() {
 
 ////------------------------------------------------------------------------------------------------------------------------
 
+/*
 export default function Post() {
 
   const [id, setId] = useState(1);
@@ -414,5 +415,105 @@ export function PostBody({id}) {
   return <p>{text}</p>
 }
 
+*/
+////---------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+
+//// 1. In React, event handlers recieves the event object as an argument by default.
+//// 2. However, when you use an arrow function directly in the onClick attribute without
+////    passing the event explicitly, React doesn't pass the event object to your handler function.
+////    This is because the arrow function crates a new function and call your handler without
+////    passing any arguments.
+
+
+//// 3. Event Handling in React.js is the process of capturing and responding to user interactions, such as 
+////    clicks, keystrokes, or form submissions, within a React application.
+
+//// 4. Event handling in React follows a similar pattern to standard JavaScript event handling but with some key
+////    differences, such as using synthetic events for cross-browser compatibilty and providing consistent 
+////    event handling across different elements and browsers.
+
+
+//// 5. What is SyntheticBaseEvent in React?
+////    When handle events in React, like clicking a button or typing in an input box, React wraps the 
+////    native browser events in something called a SyntheticEvent.
+
+////    This SyntheticEvent is a wrapper around the broswer's native event, making sure that events behave
+////    constitent across browsers.
+
+export function Child({ myHandleClick, myHandleClick1, myHandleClick2 }) {
+  return (
+    <div>
+      <button style={{ backgroundColor: 'green' }} onClick={myHandleClick}>Increment using simple function</button>
+      <br/>
+      <button style={{ backgroundColor: 'red' }} onClick={myHandleClick1}>Increment 1 using Arrow function</button>
+      <br/>
+      <button style={{ backgroundColor: 'yellow' }} onClick={myHandleClick2}>Increment  2 using Arrow function</button>
+    </div>
+  )
+}
+
+export default function Parent() {
+  const [count, setCount] = useState(0);
+
+   //// Simple Named Function.
+  function handleClick() {
+    console.log('Simple Function ran in Child Component');
+    console.log(event);
+    console.log(event.target);
+    console.log(event.type);
+    setCount(prev => prev + 1);
+  }
+
+  //// Simple Arrow Function.
+  const handleClick1 = () => {
+    console.log('Arrow Function 1 ran in Child Component');
+    console.log(event); //// logged as pointer Event
+    console.log(event.target);
+    console.log(event.type);
+    setCount(prev => prev + 1);
+  }
+
+  const handleClick2 = (e) => {
+    console.log('Arrow Function 2 ran in Child Component');
+    console.log(e); //// logged as Synthetic Event
+    console.log(e.target);
+    console.log(e.type);
+    setCount(prev => prev + 1);
+  }
+
+  const handleWelcomeUser = (user) => {
+console.log(`Welcome User ${user}`);
+  }
+
+  return (
+    <div>
+      <h2>Count is : {count}</h2>
+       
+       {/* Inline Arrow Function */}
+       <button style={{backgroundColor: 'cyan'}} onClick={()=> alert('Hey I am Inline Arrow Function')}>Click Me 1</button>
+       <br/>
+
+       {/* Inline Event Handler */}
+       <button style={{backgroundColor: 'pink'}} onClick={(helloEventHandler)=> console.log(helloEventHandler)}>Click Me 2</button>
+       <br/>
+
+       {/* Function call when the component mount. 
+         We haven't called this function, if you call this function here then it will run
+         without even clicking. You just need to pass reference and not call here. 
+       */}
+       <button style={{backgroundColor: 'skyblue'}} onClick={handleWelcomeUser('Vishwajeet')}>Greet User 1</button>
+
+<br/>
+       {/* Function call on button click */}
+       <button style={{backgroundColor: 'skyblue'}} onClick={() => handleWelcomeUser('Vishwajeet')}>Greet User 2</button>
+
+
+ {/* handleClick and handleClick1 Named function pass as reference to respective props. */}
+      <Child myHandleClick={handleClick} myHandleClick1={handleClick1} 
+            myHandleClick2={(vishwajeet) => handleClick2(vishwajeet)}>
+      </Child>
+      </div >
+    )
+}
